@@ -37,10 +37,12 @@
       padding: 0;
     }
 
-    h2{
+    .streamName{
+      padding: 0;
+      margin: 0;
       color: white;
       margin: 0;
-      margin-left: 140px;
+      margin-left: 26px;
       margin-top: -12px;
       padding-top: 30px;
       font-size: 1.9em;
@@ -75,14 +77,15 @@
     p{
       color: white;
       font-style: italic;
-      margin-left: 115px;
-      margin-top: 6px;
+      margin-left: 150px;
+      margin-top: 62px;
+      width: 100%;
     }
 
     .offlinePic{
       width: 80px;
       height: 80px;
-      background-color: black;
+      background-color: #232323;
       border-radius: 50%;
       float: left;
       border: 1px solid #cccccc;
@@ -97,6 +100,19 @@
       padding: 0;
       margin-left: 20px;
       margin-top: 2px;
+    }
+
+    a{
+      float: left;
+      color: white;
+      margin: 0;
+      margin-left: 105px;
+      margin-top: -90px;
+      padding-top: 30px;
+      font-size: 2.1em;
+      font-weight: bold;
+      text-decoration: none;
+
     }
 
 
@@ -165,7 +181,10 @@
                 streamerPic.classList += "displayPic";
                 liveStream.appendChild(streamerPic);
 
-                const streamerName = document.createElement('h2');
+                const streamerName = document.createElement('a');
+                streamerName.classList += 'streamName';
+                streamerName.href= responseArr[i].stream.channel.url;
+                streamerName.target="_blank";
                 streamerName.innerHTML = responseArr[i].stream.channel.name;
                 liveStream.appendChild(streamerName);
 
@@ -193,6 +212,17 @@
           const offlinePicText = document.createElement('h3');
           offlinePicText.innerHTML = '?';
           offlinePic.appendChild(offlinePicText);
+
+          const offlineName = document.createElement('a');
+          offlineName.innerHTML = streamArr[i];
+          console.log(streamArr[i] + ' why');
+          offlineName.href= 'https://www.twitch.tv/' + streamArr[i];
+          offlineName.target="_blank";
+          offlinePic.appendChild(offlineName);
+
+          const streamerDes = document.createElement('p');
+          streamerDes.innerHTML = 'Offline';
+          offlineStream.appendChild(streamerDes);
         }
       }
 
