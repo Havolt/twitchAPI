@@ -7,6 +7,26 @@
 
     body, html{
       background-color: #f7f7f7;
+      font-family: arial;
+    }
+
+    #app{
+      margin: 40px auto;
+      width: 80%;
+      background-color: #4B367C;
+      border-radius: 1%;
+    }
+
+    #headDiv{
+      width: 100%;
+      height: 150px
+    }
+
+    h1{
+      color: white;
+      margin-left: 40px;
+      padding-top: 40px;
+      font-size: 4em;
     }
 
 
@@ -21,8 +41,11 @@
 
 
       const streamArr = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
-      const requestURL = 'https://wind-bow.gomix.me/twitch-api/streams/';
       let responseArr = [];
+
+      //ID Tags
+      let headDiv;
+      let listBody;
 
       for(var i = 0; i < streamArr.length; i++){
 
@@ -41,8 +64,42 @@
 
       }
 
+      function createList(){
+        const headArea = document.createElement('div');
+        headArea.id = "headDiv";
+        app.appendChild(headArea);
+        headDiv = document.getElementById('headDiv');
+
+        const headTitle = document.createElement('h1');
+        headTitle.innerHTML="Twitch Streamers";
+        headArea.appendChild(headTitle);
+
+        const lBody = document.createElement('div');
+        lBody.id = "listBody";
+        app.appendChild(lBody);
+        listBody = document.getElementById('listBody');
+
+        for(var i = 0; i < responseArr.length; i++){
+          if(responseArr[i].stream){
+            console.log('yup');
+            for(var j = 0; j < streamArr.length; j++){
+              if(responseArr[i].stream.channel.name.toLowerCase() == streamArr[j].toLowerCase()){
+               console.log('working');
+              }
+            }
+          }
+        }
+      }
+
+
+
+      function init(){
+        createList();
+      }
+
       var myInterval = setInterval(function(){
         if(responseArr.length == streamArr.length){
+          init();
           console.log(responseArr);
           clearInterval(myInterval);
         }
