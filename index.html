@@ -19,14 +19,37 @@
 
     #headDiv{
       width: 100%;
-      height: 150px
+      height: 150px;
+      border-bottom: 2px solid white;
     }
 
     h1{
       color: white;
       margin-left: 40px;
       padding-top: 40px;
+      margin-bottom: 0;
+      padding-bottom: 0;
       font-size: 4em;
+    }
+
+    #listBody{
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    h2{
+      color: white;
+      margin: 0;
+      margin-left: 100px;
+      padding-top: 20px;
+      font-size: 1.8em;
+    }
+
+    .liveDiv{
+      background-color: #596797;
+      width: 100%;
+      height: 100px;
+      border-bottom: 2px solid white;
     }
 
 
@@ -46,6 +69,7 @@
       //ID Tags
       let headDiv;
       let listBody;
+      let liveDiv;
 
       for(var i = 0; i < streamArr.length; i++){
 
@@ -84,14 +108,25 @@
             console.log('yup');
             for(var j = 0; j < streamArr.length; j++){
               if(responseArr[i].stream.channel.name.toLowerCase() == streamArr[j].toLowerCase()){
-               console.log('working');
+                const liveStream = document.createElement('div');
+                liveStream.classList += "liveDiv";
+                lBody.appendChild(liveStream);
+
+                const streamerName = document.createElement('h2');
+                streamerName.innerHTML = responseArr[i].stream.channel.name;
+                liveStream.appendChild(streamerName);
+
+                streamArr.splice(j, 1);
+                console.log(streamArr);
               }
             }
           }
         }
       }
 
-
+      function assigners(){
+        liveDiv = document.getElementsByClassName('liveDiv');
+      }
 
       function init(){
         createList();
