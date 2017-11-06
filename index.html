@@ -22,22 +22,31 @@
 
       const streamArr = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
       const requestURL = 'https://wind-bow.gomix.me/twitch-api/streams/';
+      let responseArr = [];
 
-      //for(var i = 0; i < streamArr.length; i++){
+      for(var i = 0; i < streamArr.length; i++){
 
-        let num = Math.round(1000 * Math.random());
+        let num = i;
         let callBackMethodName = 'cb_'; + num;
 
         window[callBackMethodName] = function(data){
           console.log(data);
+          responseArr.push(data);
         }
 
         let script = document.createElement('script');
-        script.src = "https://wind-bow.gomix.me/twitch-api/streams/ESL_SC2?callback=" + callBackMethodName;
+        script.src = "https://wind-bow.gomix.me/twitch-api/streams/" + streamArr[i] + "?callback=" + callBackMethodName;
 
         document.querySelector('head').appendChild(script);
 
-      //}
+      }
+
+      var myInterval = setInterval(function(){
+        if(responseArr.length == streamArr.length){
+          console.log(responseArr);
+          clearInterval(myInterval);
+        }
+      }, 100)
 
 
 
