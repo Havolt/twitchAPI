@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Twitch API</title>
+    <style>
+
+    body, html{
+      background-color: #f7f7f7;
+      font-family: arial;
+    }
+
+    #app{
+      margin: 40px auto;
+      width: 80%;
+      background-color: #4B367C;
+      border-radius: 1%;
+    }
+
+    #headDiv{
+      width: 100%;
+      height: 150px;
+      border-bottom: 2px solid white;
+    }
+
+    h1{
+      color: white;
+      margin-left: 40px;
+      padding-top: 40px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      font-size: 3.5em;
+    }
+
+    #listBody{
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .streamName{
+      padding: 0;
+      margin: 0;
+      color: white;
+      margin: 0;
+      margin-left: 26px;
+      margin-top: -12px;
+      padding-top: 30px;
+      font-size: 1.9em;
+    }
+
+    .displayPic{
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      float: left;
+      border: 1px solid #cccccc;
+      margin-left: 30px;
+      margin-top: 5px;
+    }
+
+    .liveDiv{
+      background-color: #596797;
+      width: 100%;
+      height: 100px;
+      border-bottom: 2px solid white;
+      overflow: hidden;
+    }
+
+    .offlineDiv{
+      background-color: #835294;
+      width: 100%;
+      height: 100px;
+      border-bottom: 2px solid white;
+      overflow: hidden;
+    }
+
+    p{
+      color: white;
+      font-style: italic;
+      margin-left: 150px;
+      margin-top: 62px;
+      width: 100%;
+    }
+
+    .offlinePic{
+      width: 80px;
+      height: 80px;
+      background-color: #232323;
+      border-radius: 50%;
+      float: left;
+      border: 1px solid #cccccc;
+      margin-left: 30px;
+      margin-top: 5px;
+    }
+
+    h3{
+      color: white;
+      font-size: 4em;
+      margin: 0;
+      padding: 0;
+      margin-left: 20px;
+      margin-top: 2px;
+    }
+
+    a{
+      float: left;
+      color: white;
+      margin: 0;
+      margin-left: 105px;
+      margin-top: -90px;
+      padding-top: 30px;
+      font-size: 2.1em;
+      font-weight: bold;
+      text-decoration: none;
+
+    }
+
+
+    </style>
+  </head>
+  <body>
+
+    <div id="app"></div>
+
+
+    <script>
+
+
+      const streamArr = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+      let responseArr = [];
+
+      //ID Tags
+      let headDiv;
+      let listBody;
+      let liveDiv;
+      let offlineDiv;
+
+      for(var i = 0; i < streamArr.length; i++){
+
+        let num = i;
+        let callBackMethodName = 'cb_'; + num;
+
+        window[callBackMethodName] = function(data){
+          console.log(data);
+          responseArr.push(data);
+        }
+
+        let script = document.createElement('script');
+        script.src = "https://wind-bow.gomix.me/twitch-api/streams/" + streamArr[i] + "?callback=" + callBackMethodName;
+
+        document.querySelector('head').appendChild(script);
+
+      }
+
+      function createList(){
+        const headArea = document.createElement('div');
+        headArea.id = "headDiv";
+        app.appendChild(headArea);
+        headDiv = document.getElementById('headDiv');
+
+        const headTitle = document.createElement('h1');
+        headTitle.innerHTML="Twitch Streamers";
+        headArea.appendChild(headTitle);
+
+        const lBody = document.createElement('div');
+        lBody.id = "listBody";
+        app.appendChild(lBody);
+        listBody = document.getElementById('listBody');
+
+        for(var i = 0; i < responseArr.length; i++){
+          if(responseArr[i].stream){
+            console.log('yup');
+            for(var j = 0; j < streamArr.length; j++){
+              if(responseArr[i].stream.channel.name.toLowerCase() == streamArr[j].toLowerCase()){
+                const liveStream = document.createElement('div');
+                liveStream.classList += "liveDiv";
+                lBody.appendChild(liveStream);
+
+                const streamerPic = document.createElement('img');
+                streamerPic.src= responseArr[i].stream.channel.logo;
+                streamerPic.classList += "displayPic";
+                liveStream.appendChild(streamerPic);
+
+                const streamerName = document.createElement('a');
+                streamerName.classList += 'streamName';
+                streamerName.href= responseArr[i].stream.channel.url;
+                streamerName.target="_blank";
+                streamerName.innerHTML = responseArr[i].stream.channel.name;
+                liveStream.appendChild(streamerName);
+
+                const streamerDes = document.createElement('p');
+                streamerDes.innerHTML = responseArr[i].stream.channel.game + ': ' + responseArr[i].stream.channel.status;
+                liveStream.appendChild(streamerDes);
+
+                streamArr.splice(j, 1);
+                console.log(streamArr);
+              }
+            }
+          }
+        }
+
+        for(var i = 0; i < streamArr.length; i++){
+
+          const offlineStream = document.createElement('div');
+          offlineStream.classList += "offlineDiv";
+          lBody.appendChild(offlineStream);
+
+          const offlinePic = document.createElement('div');
+          offlinePic.classList += 'offlinePic';
+          offlineStream.appendChild(offlinePic);
+
+          const offlinePicText = document.createElement('h3');
+          offlinePicText.innerHTML = '?';
+          offlinePic.appendChild(offlinePicText);
+
+          const offlineName = document.createElement('a');
+          offlineName.innerHTML = streamArr[i];
+          console.log(streamArr[i] + ' why');
+          offlineName.href= 'https://www.twitch.tv/' + streamArr[i];
+          offlineName.target="_blank";
+          offlinePic.appendChild(offlineName);
+
+          const streamerDes = document.createElement('p');
+          streamerDes.innerHTML = 'Offline';
+          offlineStream.appendChild(streamerDes);
+        }
+      }
+
+      function assigners(){
+        liveDiv = document.getElementsByClassName('liveDiv');
+        offlineDive = document.getElementsByClassName('offlineDiv');
+      }
+
+      function init(){
+        createList();
+        assigners()
+      }
+
+      var myInterval = setInterval(function(){
+        if(responseArr.length == streamArr.length){
+          init();
+          console.log(responseArr);
+          clearInterval(myInterval);
+        }
+      }, 100)
+
+
+
+
+
+
+
+    </script>
+  </body>
+</html>
